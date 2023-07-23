@@ -1,10 +1,9 @@
 import {FC, ReactNode} from "react";
 import {css} from "@/styled-system/css";
-import {StandardLonghandProperties} from "@/styled-system/types/csstype";
 
 interface Props {
     children: ReactNode
-    classNames?: StandardLonghandProperties
+    classNames?: any
 }
 export const Headline:FC<{children:ReactNode}> = ({children,classNames}) => {
     return (
