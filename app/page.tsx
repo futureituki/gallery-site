@@ -5,11 +5,8 @@ import GalleryBox from "@/components/Box/GalleryBox";
 import {supabase} from "@/supabase/client";
 import React, {useEffect} from "react";
 import {FileObject} from "@supabase/storage-js";
+import {Meta} from "@/supabase/type/meta";
 
-interface Meta {
-    title:string
-    meta:string
-}
 export default function Home() {
     const {open, handleOpen} = useMenuContext()
     const [images, setImages] = React.useState<null |  FileObject[]>(null)

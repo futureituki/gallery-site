@@ -11,6 +11,11 @@ function HeaderServer({children}:Props):React.JSX.Element {
         <header className={css({
             width: "100%",
             height: "80px",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            zIndex: "99",
+            backgroundColor: "#fff",
         })}>
             <div className={css({
                 display: "flex",

@@ -3,3 +3,25 @@
 body {
     font-family: 'Playfair Display', serif;
 }
+img.lg-object {
+    width: 30vw;
+    object-fit: contain;
+}
+img.lg-image {
+    width: 30vw;
+    object-fit: contain;
+}
+.lg-react-element  {
+    display: grid;
+    grid-gap: 20px;
+}
+@media (max-width: 568px) {
+    .lg-react-element  {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 3fr));
+    }
+}
+@media (min-width: 569px) {
+    .lg-react-element  {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}

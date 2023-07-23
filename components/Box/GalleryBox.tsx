@@ -2,11 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {css} from "@/styled-system/css";
-
-interface Meta {
-    title:string
-    meta:string
-}
+import {Meta} from "@/supabase/type/meta";
 interface Props {
     meta:Meta
     link:string

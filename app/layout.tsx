@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Header from "@/components/Navigation/header";
 import {MenuContextProvider, useMenuContext} from "@/context/MenuContext";
+import {css} from "@/styled-system/css";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -20,7 +21,11 @@ export default function RootLayout({
       <body>
       <MenuContextProvider>
       <Header />
+        <div className={css({
+          margin:"100px 0 0 0",
+        })}>
           {children}
+        </div>
       </MenuContextProvider>
       </body>
 </html>

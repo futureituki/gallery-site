@@ -28,6 +28,7 @@ function Header() {
                 position: "fixed",
                 transition: "all .4s",
                 right: open ? "0" : "-100%",
+                zIndex: "100",
                 top: "0",
                 backgroundColor: "#f8f8f8",
             })}>

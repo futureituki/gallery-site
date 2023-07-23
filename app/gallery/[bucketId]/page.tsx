@@ -1,15 +1,23 @@
 'use client'
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState,cache} from "react";
 import {supabase} from "@/supabase/client";
 import {FileObject} from "@supabase/storage-js";
 import Image from "next/image";
 import {css} from "@/styled-system/css";
+import lgZoom from 'lightgallery/plugins/zoom';
+import dynamic from 'next/dynamic';
 
+const LightGallery = dynamic(() => import('lightgallery/react'), {
+    ssr: false
+});
+import 'lightgallery/css/lightgallery.css';
+import 'lightgallery/css/lg-zoom.css';
+import {Meta} from "@/supabase/type/meta";
 export default function Page({ params }: { params: { bucketId: string } }) {
     const [images, setImages] = useState<null | FileObject[]>([])
-    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+    const [metaData, setMetaData] = useState<null | Meta>(null)
     useEffect(() => {
-        async function getBucket() {
+        const getBucket = cache(async() => {
             const { data, error } = await supabase
                 .storage.from(params.bucketId)
                 .list('images', {
@@ -23,64 +31,62 @@ export default function Page({ params }: { params: { bucketId: string } }) {
             } else {
                 setImages(data)
             }
-        }
+            try {
+                const response = await fetch(process.env.NEXT_PUBLIC_CDN_URL + 'thumbnails/' + params.bucketId + '/' + params.bucketId + '.json')
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                const data = await response.json();
+                setMetaData(data)
+            } catch (error) {
+                throw error
+                console.log(error)
+            }
+        })
         getBucket()
     },[])
-    const openModal = (imageIndex:number) => {
-        setSelectedImageIndex(imageIndex);
-    };
 
-    const closeModal = () => {
-        setSelectedImageIndex(null);
-    };
-
-    const goToNextImage = () => {
-        setSelectedImageIndex((prevIndex) => (prevIndex === images!.length - 1 ? 0 : prevIndex! + 1));
-    };
-
-    const goToPrevImage = () => {
-        setSelectedImageIndex((prevIndex) => (prevIndex === 0 ? images!.length - 1 : prevIndex! - 1));
-    };
-
-    const selectedImage = selectedImageIndex !== null ? images![selectedImageIndex] : null;
-    console.log(images)
     return (
         <div>
-            {images?.map((image, index) => (
-                <div key={index} onClick={() => openModal(index)}>
-                <Image quality={100} src={process.env.NEXT_PUBLIC_CDN_URL + params.bucketId + '/images/' + image.name} alt="" width={300} height={300}/>
-                </div>
-                ))}
-            {selectedImage && (
-                <div className={css({
-                    position: 'fixed',
-                    top: '0',
-                    left: '0',
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0, 0, 0, 0.8)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+            <div>
+                <h1 className={css({
+                    fontSize: "2.4rem",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    lineHeight: "1.7",
                 })}>
-                    <div className="modal-content">
-                        <button className="prev-button" onClick={goToPrevImage}>
-                            Prev
-                        </button>
-                        <picture>
-                            <source type="image/webp" srcSet={process.env.NEXT_PUBLIC_CDN_URL + params.bucketId + '/images/' + selectedImage.name}></source>
-                            <Image quality={100} src={process.env.NEXT_PUBLIC_CDN_URL + params.bucketId + '/images/' + selectedImage.name} alt={selectedImage.name} width={400} height={400} />
-                        </picture>
-                        <button className="next-button" onClick={goToNextImage}>
-                            Next
-                        </button>
-                        {/*<p>{selectedImage.caption}</p>*/}
-                        <button className="close-button" onClick={closeModal}>
-                            Close
-                        </button>
-                    </div>
+                    {metaData?.title}
+                    <span className={css({
+                        display: "block",
+                        fontWeight: "normal",
+                        fontSize: "1rem",
+                        letterSpacing: "8px",
+                    })}>
+                        {metaData?.meta}
+                    </span>
+                </h1>
+            </div>
+            <div className={css({
+                width: "90%",
+                margin: "100px auto",
+            })}>
+                <LightGallery onSlideItemLoad={() => console.log('load')} mode="lg-fade" plugins={[lgZoom]}>
+                        {images?.map((image, index) => (
+                            <a className={css({
+                                display: "block",
+                                width: "100%",
+                                height: "100%",
+                            })} data-src={process.env.NEXT_PUBLIC_CDN_URL + params.bucketId + '/images/' + image.name} key={index} >
+                                <Image className={css({
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "contain",
+                                })} quality={100} src={process.env.NEXT_PUBLIC_CDN_URL + params.bucketId + '/images/' + image.name} alt="" width={300} height={300}/>
+                            </a>
+                        ))}
+                </LightGallery>
+            </div>
+
                 </div>
-            )}
-        </div>
     )
 }
