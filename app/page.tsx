@@ -3,9 +3,10 @@ import { css } from "@/styled-system/css";
 import {useMenuContext} from "@/context/MenuContext";
 import GalleryBox from "@/components/Box/GalleryBox";
 import {supabase} from "@/supabase/client";
-import React, {useEffect} from "react";
+import React, {Suspense, useEffect} from "react";
 import {FileObject} from "@supabase/storage-js";
 import {Meta} from "@/supabase/type/meta";
+import {Headline} from "@/components/Headline";
 
 export default function Home() {
     const {open, handleOpen} = useMenuContext()
@@ -63,12 +64,7 @@ export default function Home() {
               placeItems:"center",
               margin: "50px 0",
           })}>
-              <h1 className={css({
-                  textAlign: "center",
-                  fontSize: "3rem",
-                  fontWeight: "900",
-                  lineHeight: "1.2",
-              })}>
+              <Headline classNames={{textAlign:"center"}}>
                   Itsuki Sato Photography
                   <span className={css({
                         fontSize: "1.4rem",
@@ -78,7 +74,7 @@ export default function Home() {
                   })}>
                       Travel Photography
                   </span>
-              </h1>
+              </Headline>
           </div>
             <div className={css({
                 width: "95%",
@@ -89,7 +85,7 @@ export default function Home() {
                 }
             })}>
                 <div className={css({
-                    display:"f",
+                    display:"flex",
                     flexDirection:"column",
                 })}>
                     {images?.map((data,index) => (

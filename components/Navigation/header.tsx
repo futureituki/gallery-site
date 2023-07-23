@@ -5,7 +5,7 @@ import Link from "next/link";
 import Hamburger from "@/components/Navigation/hamburger";
 import {useMenuContext} from "@/context/MenuContext";
 import HeaderServer from "@/components/Navigation/header-server";
-
+import {NavigationList} from "@/constants/navigation";
 function Header() {
     const {open, handleOpen} = useMenuContext()
     return (
@@ -61,6 +61,29 @@ function Header() {
                     }
                 })} onClick={() => handleOpen()}>
                 </button>
+                <div className={css({
+                    position:"absolute",
+                    left:"30%",
+                    top:"8%",
+                })}>
+                    <nav>
+                        <ul>
+                            {NavigationList.map((item) => (
+                                <li key={item.name} className={css({
+                                    fontSize:'20px',
+                                    fontWeight:'normal',
+                                    marginBottom:'20px',
+                                    letterSpacing:'3px',
+                                })}>
+                                    <Link href={item.link}>
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+
+                    </nav>
+                </div>
             </div>
         </HeaderServer>
     )

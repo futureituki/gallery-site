@@ -13,6 +13,18 @@ const LightGallery = dynamic(() => import('lightgallery/react'), {
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
 import {Meta} from "@/supabase/type/meta";
+
+
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+    const { data: thumbnails } = await supabase.storage.from("thumbnails").list()
+
+    return thumbnails?.map(({ bucket_id }) => ({
+        bucketId: bucket_id,
+    }));
+}
+
 export default function Page({ params }: { params: { bucketId: string } }) {
     const [images, setImages] = useState<null | FileObject[]>([])
     const [metaData, setMetaData] = useState<null | Meta>(null)

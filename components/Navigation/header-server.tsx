@@ -2,6 +2,8 @@ import {css} from "@/styled-system/css";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import {SocialIcon} from "@/components/Navigation/SocialIcon";
+import {NavigationList} from "@/constants/navigation";
 
 interface Props {
     children: React.ReactNode
@@ -59,63 +61,20 @@ function HeaderServer({children}:Props):React.JSX.Element {
                             gap: "25px",
                             alignItems: "center",
                         })}>
-                            <li>
-                                <Link className={css({
-                                    fontSize: ".8rem",
-                                    fontWeight: "bold",
-                                })} href={'/'}>
-                                    HOME
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className={css({
-                                    fontSize: ".8rem",
-                                    fontWeight: "bold",
-                                })} href={'/about'}>
-                                    ABOUT ME
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className={css({
-                                    fontSize: ".8rem",
-                                    fontWeight: "bold",
-                                })} href={'/contact'}>
-                                    CONTACT ME
-                                </Link>
-                            </li>
+                            {NavigationList.map((item) => (
+                                <li key={item.name}>
+                                    <Link className={css({
+                                        fontSize: ".8rem",
+                                        fontWeight: "bold",
+                                    })} href={item.link}>
+                                        {item.name}
+                                    </Link>
+                                </li>
+                                ))}
                         </ul>
                     </nav>
                     <nav>
-                        <ul className={css({
-                            display: "flex",
-                            gap: "12px",
-                            alignItems: "center",
-                        })}>
-                            <li className={css({
-                                fontSize: "1rem",
-                                fontWeight: "bold",
-                                display:"flex",
-                                alignItems: "center",
-                                width: "20px",
-                                height: "20px",
-                            })}>
-                                <Link href={'/'}>
-                                    <Image src="/instagram.svg" alt="インスタグラムのロゴ" width={30} height={30} />
-                                </Link>
-                            </li>
-                            <li className={css({
-                                fontSize: "1rem",
-                                fontWeight: "bold",
-                                display:"flex",
-                                alignItems: "center",
-                                width: "20px",
-                                height: "20px",
-                            })}>
-                                <Link href={'/'}>
-                                    <Image src="/instagram.svg" alt="インスタグラムのロゴ" width={30} height={30} />
-                                </Link>
-                            </li>
-                        </ul>
+                      <SocialIcon />
                     </nav>
                 </div>
             </div>

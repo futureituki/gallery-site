@@ -17,14 +17,6 @@ export default defineConfig({
               circleanime: {
                   '0%': {scale:' 0.68'},
               '100%': {scale: '1.2',opacity: '0'},
-              },
-              slidenext: {
-                    '0%': {transform: 'translateX(0%)',opacity: '1'},
-                    '100%': {transform: 'translateX(-150%)',opacity: '0'},
-              },
-              slideprev: {
-                  '0%': {transform: 'translateX(0%)',opacity: '1'},
-                  '100%': {transform: 'translateX(150%)',opacity: '0'},
               }
           }
       }
